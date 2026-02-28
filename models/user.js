@@ -1,37 +1,60 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
-    {
-        firstname: {
-            type: String,
-            required: true,
-        },
-        lastname: {
-            type: String,
-            required: true,
-        },
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
-        medicines: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Medicine',
-            }
-        ]
+  {
+    firstname: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    {
-        timestamps: true
-    }
+    lastname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      select: false, // أمان أقوى
+    },
+
+    medicines: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Medicine",
+      },
+    ],
+
+    reminders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Reminder",
+      },
+    ],
+
+    lastLogin: {
+      type: Date,
+    },
+
+    deviceTokens: {
+      type: [String], // للتنبيهات لو هتعمل فايبز أو FCM
+      default: [],
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
+const User = mongoose.model("User", userSchema);
 
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+export default User;

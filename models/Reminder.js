@@ -7,25 +7,50 @@ const reminderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    medicineName: {
-      type: String,
-      required: [true, "Medicine name is required"],
+
+    medicine: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Medicine",
+      required: true,
     },
+
     dosage: {
       type: String,
       required: [true, "Dosage information is required"],
     },
-    time: {
-      type: Date,
-      required: [true, "Reminder time is required"],
+
+    times: {
+      type: [String], 
+      required: true, 
+      // مثال: ["08:00", "14:00", "20:00"]
     },
+
+    repeatType: {
+      type: String,
+      enum: ["once", "daily", "weekly", "custom"],
+      default: "daily",
+    },
+
+    daysOfWeek: {
+      type: [Number], 
+      // مثال: [0,1,2,3,4] -> الأحد إلى الخميس
+      default: [],
+    },
+
     note: {
       type: String,
+      default: "",
     },
-    isTaken: {
+
+    isTakenToday: {
       type: Boolean,
       default: false,
     },
+
+    remindBeforeMinutes: {
+      type: Number,
+      default: 0, // 0 = بدون تنبيه مسبق
+    }
   },
   {
     timestamps: true,

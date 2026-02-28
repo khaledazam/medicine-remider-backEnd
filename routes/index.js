@@ -1,12 +1,24 @@
-const express = require('express');
-const homeController = require('../controllers/homeController');
+import express from "express";
+import homeController from "../controllers/homeController.js";
+import authRoutes from "./authRoutes.js";
+import userRoutes from "./users.js";
+import medicineRoutes from "./medicines.js";
+import reminderRoutes from "./reminderRoutes.js";
+
 const router = express.Router();
 
-router.get('/', homeController.home);
+// Home route (بدون protect)
+router.get("/", homeController.home);
 
+// API Routes (كلها محمية بـ protect في server.js)
+router.use("/auth", authRoutes);
+router.use("/users", userRoutes);
+router.use("/medicines", medicineRoutes);
+router.use("/reminders", reminderRoutes);
 
-router.use('/users', require('./users'));
-router.use('/medicines', require('./medicines'));
+// Not Found Handling for Routes
+router.all("*", (req, res) => {
+    res.status(404).json({ message: "Route not found" });
+});
 
-module.exports = router;
-
+export default router;

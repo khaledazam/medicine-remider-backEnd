@@ -1,85 +1,113 @@
-import User from "../models/User.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import User from "../models/User.js";
 
-// generate jwt token
-const createToken = (userId) => {
+// helper لتوليد JWT
+const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
+// 🟢 Register
 export const register = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { firstname, lastname, username, password, cpassword } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+    if (!firstname || !lastname || !username || !password || !cpassword)
+      return res.status(400).json({ message: "All fields are required", success: false });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (password !== cpassword)
+      return res.status(400).json({ message: "Passwords do not match", success: false });
+
+    const existingUser = await User.findOne({ username });
+    if (existingUser)
+      return res.status(409).json({ message: "Username already taken", success: false });
+
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.BCRYPT_SALT_ROUNDS || "10"));
 
     const newUser = await User.create({
-      name,
-      email,
+      firstname,
+      lastname,
+      username,
       password: hashedPassword,
-      phone,
     });
 
-    const token = createToken(newUser._id);
+    const token = generateToken(newUser._id);
 
     res.status(201).json({
       message: "User registered successfully",
-      user: { id: newUser._id, name, email, phone },
-      token,
+      success: true,
+      jwtToken: token,
+      user: {
+        id: newUser._id,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        username: newUser.username,
+      },
     });
   } catch (error) {
-    console.error("Register Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in register:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
   }
 };
 
+// 🟢 Login
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!username || !password)
+      return res.status(400).json({ message: "Username and password required", success: false });
+
+    const user = await User.findOne({ username }).select("+password");
+
+    if (!user) return res.status(401).json({ message: "Invalid credentials", success: false });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials", success: false });
 
-    const token = createToken(user._id);
+    const token = generateToken(user._id);
 
     res.status(200).json({
       message: "Login successful",
-      user: { id: user._id, name: user.name, email: user.email },
-      token,
+      success: true,
+      jwtToken: token,
+      user: {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        username: user.username,
+      },
     });
   } catch (error) {
-    console.error("Login Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in login:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
   }
 };
 
-export const logout = async (req, res) => {
-  try {
-    res.status(200).json({ message: "Logged out successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
+// 🟢 Protected Profile
 export const getProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    if (!user) return res.status(404).json({ message: "User not found" });
+  if (!req.user) return res.status(401).json({ message: "User not found", success: false });
 
-    res.status(200).json(user);
+  res.status(200).json({ success: true, user: req.user });
+};
+
+
+// 🟢 Logout (frontend يجب أن يحذف التوكن)
+export const logout = (req, res) => {
+  res.json({ message: "Logged out successfully", success: true });
+};
+
+// 🟢 Refresh Token (يمكن استخدامه لتجديد التوكن)
+export const refreshToken = (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not found", success: false });
+    }
+
+    const newToken = generateToken(req.user._id);
+    res.json({ success: true, jwtToken: newToken });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in refreshToken:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
   }
 };
