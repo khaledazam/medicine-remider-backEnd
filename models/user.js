@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-
     username: {
       type: String,
       required: true,
@@ -20,33 +19,28 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-
     password: {
       type: String,
       required: true,
-      select: false, // أمان أقوى
+      select: false,
     },
-
     medicines: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Medicine",
       },
     ],
-
     reminders: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reminder",
       },
     ],
-
     lastLogin: {
       type: Date,
     },
-
     deviceTokens: {
-      type: [String], // للتنبيهات لو هتعمل فايبز أو FCM
+      type: [String],
       default: [],
     },
   },
@@ -55,6 +49,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model("User", userSchema);
+// الحل المهم: استخدم mongoose.models.User لو موجود، وإلا عرّفه
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;

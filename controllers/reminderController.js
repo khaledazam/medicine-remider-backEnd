@@ -5,16 +5,16 @@ import Reminder from "../models/Reminder.js";
 // =======================
 export const createReminder = async (req, res) => {
   try {
-    const { medicineName, dose, time, note, repeat, isImportant } = req.body;
+    const { medicine, dosage, time, note, repeat, isImportant } = req.body;
 
-    if (!medicineName || !dose || !time) {
+    if (!medicine || !dosage || !time) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const reminder = await Reminder.create({
       user: req.user._id,
-      medicineName,
-      dose,
+      medicine,
+      dosage,
       time,
       note: note || "",
       repeat: repeat || "once",     // new

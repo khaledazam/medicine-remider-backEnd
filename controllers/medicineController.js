@@ -1,7 +1,7 @@
 // controllers/medicineController.js
 import Medicine from "../models/Medicine.js";
 
-// 📌 1) Add Medicine
+//  1) Add Medicine
 export const addMedicine = async (req, res) => {
   try {
     const { name, dosage, schedule, notes, quantity, refillAlertAt } = req.body;
@@ -32,7 +32,7 @@ export const addMedicine = async (req, res) => {
 
 };
 
-// 📌 2) Edit Medicine
+//  2) Edit Medicine
 export const editMedicine = async (req, res) => {
   try {
     console.log("🔵 Edit Medicine called");
@@ -52,7 +52,7 @@ export const editMedicine = async (req, res) => {
       return res.status(400).json({ message: "Invalid medicine ID" });
     }
 
-    console.log("🔄 Updating medicine...");
+    console.log(" Updating medicine...");
     
     const medicine = await Medicine.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
@@ -78,7 +78,7 @@ export const editMedicine = async (req, res) => {
   }
 };
 
-// 📌 3) Delete Medicine
+//  3) Delete Medicine
 export const deleteMedicine = async (req, res) => {
   try {
     console.log("🔵 Delete Medicine called");
@@ -119,7 +119,7 @@ export const deleteMedicine = async (req, res) => {
   }
 };
 
-// 📌 4) Get All Medicines
+//  4) Get All Medicines
 export const getMedicines = async (req, res) => {
   try {
     const medicines = await Medicine.find({ user: req.user._id });
@@ -130,7 +130,7 @@ export const getMedicines = async (req, res) => {
   }
 };
 
-// 📌 5) Mark Dose as Taken
+//  5) Mark Dose as Taken
 export const markDoseTaken = async (req, res) => {
   try {
     console.log("🔵 Mark Dose Taken called");
@@ -206,7 +206,7 @@ export const markDoseTaken = async (req, res) => {
   }
 };
 
-// 📌 6) Missed Dose Detection
+//  6) Missed Dose Detection
 export const getMissedDoses = async (req, res) => {
   try {
     console.log("🔵 Get Missed Doses called");
@@ -266,7 +266,7 @@ export const getMissedDoses = async (req, res) => {
   }
 };
 
-// 📌 7) Refill Alerts
+//  7) Refill Alerts
 export const getRefillAlerts = async (req, res) => {
   try {
     console.log("🔵 Get Refill Alerts called");
@@ -318,7 +318,7 @@ export const getRefillAlerts = async (req, res) => {
     });
   }
 };
-// 📌 8) Daily Summary
+//  8) Daily Summary
 export const getDailySummary = async (req, res) => {
   try {
     console.log("🔵 Get Daily Summary called");
@@ -395,7 +395,7 @@ export const getDailySummary = async (req, res) => {
   }
 };
 
-// 📌 9) 30-day Calendar Schedule
+//  9) 30-day Calendar Schedule
 export const getCalendarSchedule = async (req, res) => {
   try {
     console.log("🔵 Get Calendar Schedule called");
@@ -476,7 +476,7 @@ export const getCalendarSchedule = async (req, res) => {
   }
 };
 
-// 📌 10) Upload Prescription Image
+//  10) Upload Prescription Image
 export const uploadPrescription = async (req, res) => {
   try {
     console.log("🔵 Upload Prescription called");
