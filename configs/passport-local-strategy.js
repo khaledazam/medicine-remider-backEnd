@@ -26,7 +26,7 @@ passport.use(
         return done(null, user);
 
       } catch (error) {
-        console.error(`❌ Passport Local Error: ${error}`);
+        console.error(`Passport Local Error: ${error}`);
         return done(error, false);
       }
     }

@@ -10,7 +10,6 @@ router.get("/profile", protect, getProfile);
 
 
 
-// Logout (يمسح refresh token)
 router.post("/logout", protect, logout);
 
 export default router;

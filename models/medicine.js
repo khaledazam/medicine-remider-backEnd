@@ -46,6 +46,10 @@ const medicineSchema = new mongoose.Schema(
     type: Number,
     default: 5,
   },
+  slot: {
+    type: Number,
+    default: 1,
+  },
   prescriptionImage: {
     type: String,
     default: null,

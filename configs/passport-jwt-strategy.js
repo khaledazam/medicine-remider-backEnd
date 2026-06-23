@@ -19,7 +19,7 @@ passport.use(
 
       return done(null, user);
     } catch (error) {
-      console.log(`❌ JWT auth error: ${error}`);
+      console.log(`JWT auth error: ${error}`);
       return done(error, false);
     }
   })

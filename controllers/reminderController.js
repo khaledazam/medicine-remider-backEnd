@@ -1,8 +1,6 @@
 import Reminder from "../models/Reminder.js";
 
-// =======================
-// CREATE Reminder
-// =======================
+
 export const createReminder = async (req, res) => {
   try {
     const { medicine, dosage, time, note, repeat, isImportant } = req.body;
@@ -32,9 +30,7 @@ export const createReminder = async (req, res) => {
   }
 };
 
-// =======================
-// GET ALL Reminders
-// =======================
+
 export const getReminders = async (req, res) => {
   try {
     const reminders = await Reminder.find({ user: req.user._id }).sort({ time: 1 });
@@ -49,9 +45,7 @@ export const getReminders = async (req, res) => {
   }
 };
 
-// =======================
-// GET Single Reminder
-// =======================
+
 export const getReminderById = async (req, res) => {
   try {
     const reminder = await Reminder.findOne({
@@ -70,9 +64,7 @@ export const getReminderById = async (req, res) => {
   }
 };
 
-// =======================
-// UPDATE Reminder
-// =======================
+
 export const updateReminder = async (req, res) => {
   try {
     const reminder = await Reminder.findOneAndUpdate(
@@ -95,9 +87,7 @@ export const updateReminder = async (req, res) => {
   }
 };
 
-// =======================
-// DELETE Reminder
-// =======================
+
 export const deleteReminder = async (req, res) => {
   try {
     const reminder = await Reminder.findOneAndDelete({
@@ -116,9 +106,7 @@ export const deleteReminder = async (req, res) => {
   }
 };
 
-// =======================
-// Toggle Reminder Done
-// =======================
+
 export const toggleDone = async (req, res) => {
   try {
     const reminder = await Reminder.findOne({

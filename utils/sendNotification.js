@@ -2,7 +2,6 @@
 import nodemailer from "nodemailer";
 
 /**
- * إرسال إشعار بالبريد أو بأي قناة أخرى
  * @param {string} email - البريد الإلكتروني للمستخدم
  * @param {string} subject - عنوان الإشعار
  * @param {string} message - نص الإشعار
@@ -24,8 +23,8 @@ export const sendNotification = async (email, subject, message) => {
       text: message,
     });
 
-    console.log("📩 Notification sent to:", email);
+    console.log(" Notification sent to:", email);
   } catch (error) {
-    console.error("❌ Error sending notification:", error.message);
+    console.error(" Error sending notification:", error.message);
   }
 };

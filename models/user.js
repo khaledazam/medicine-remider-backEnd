@@ -49,7 +49,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// الحل المهم: استخدم mongoose.models.User لو موجود، وإلا عرّفه
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 export default User;

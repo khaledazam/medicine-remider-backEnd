@@ -2,12 +2,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-// helper لتوليد JWT
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-// 🟢 Register
 export const register = async (req, res) => {
   try {
     const { firstname, lastname, username, password, cpassword } = req.body;
@@ -50,7 +48,6 @@ export const register = async (req, res) => {
   }
 };
 
-// 🟢 Login
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -84,7 +81,6 @@ export const login = async (req, res) => {
   }
 };
 
-// 🟢 Protected Profile
 export const getProfile = async (req, res) => {
   if (!req.user) return res.status(401).json({ message: "User not found", success: false });
 
@@ -92,12 +88,10 @@ export const getProfile = async (req, res) => {
 };
 
 
-// 🟢 Logout (frontend يجب أن يحذف التوكن)
 export const logout = (req, res) => {
   res.json({ message: "Logged out successfully", success: true });
 };
 
-// 🟢 Refresh Token (يمكن استخدامه لتجديد التوكن)
 export const refreshToken = (req, res) => {
   try {
     if (!req.user) {

@@ -22,7 +22,6 @@ const reminderSchema = new mongoose.Schema(
     times: {
       type: [String], 
       required: true, 
-      // مثال: ["08:00", "14:00", "20:00"]
     },
 
     repeatType: {
@@ -33,7 +32,6 @@ const reminderSchema = new mongoose.Schema(
 
     daysOfWeek: {
       type: [Number], 
-      // مثال: [0,1,2,3,4] -> الأحد إلى الخميس
       default: [],
     },
 
@@ -49,7 +47,7 @@ const reminderSchema = new mongoose.Schema(
 
     remindBeforeMinutes: {
       type: Number,
-      default: 0, // 0 = بدون تنبيه مسبق
+      default: 0, 
     }
   },
   {

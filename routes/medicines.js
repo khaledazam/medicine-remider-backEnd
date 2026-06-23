@@ -16,10 +16,9 @@ import {
 
 const router = express.Router();
 
-// Configure multer for image uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/prescriptions/"); // المجلد اللي ستخزن فيه الصور
+    cb(null, "uploads/prescriptions/"); 
   },
   filename: (req, file, cb) => {
     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
@@ -28,7 +27,6 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  // قبول صور فقط
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
   
   if (allowedTypes.includes(file.mimetype)) {
@@ -41,25 +39,21 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
+  limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// CRUD على Medicine
-router.get("/", getMedicines);                  // Get all medicines
-router.post("/create", addMedicine);           // Add new medicine
-router.put("/edit/:id", editMedicine);         // Edit medicine
-router.delete("/delete/:id", deleteMedicine); // Delete medicine
+router.get("/", getMedicines);                  
+router.post("/create", addMedicine);           
+router.put("/edit/:id", editMedicine);        
+router.delete("/delete/:id", deleteMedicine); 
 
-// Dose actions
-router.post("/mark-taken/:id", markDoseTaken);  // Mark dose as taken
+router.post("/mark-taken/:id", markDoseTaken); 
 
-// Reports & alerts
-router.get("/missed-doses", getMissedDoses);      // Missed doses
-router.get("/refill-alerts", getRefillAlerts);    // Refill alerts
-router.get("/daily-summary", getDailySummary);    // Daily summary
-router.get("/calendar", getCalendarSchedule);     // 30-day calendar schedule
+router.get("/missed-doses", getMissedDoses);     
+router.get("/refill-alerts", getRefillAlerts);    
+router.get("/daily-summary", getDailySummary);    
+router.get("/calendar", getCalendarSchedule);    
 
-// Upload prescription image
 router.post("/upload-prescription/:id", upload.single("prescription"), uploadPrescription);
 
 export default router;

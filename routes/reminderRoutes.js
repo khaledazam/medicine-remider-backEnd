@@ -5,7 +5,7 @@ import {
   updateReminder,
   deleteReminder,
 } from "../controllers/reminderController.js";
-import { protect } from "../middlewars/authMiddleware.js"; // لاحظ .js
+import { protect } from "../middlewars/authMiddleware.js"; 
 
 const router = express.Router();
 
