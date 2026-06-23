@@ -1,4 +1,4 @@
-import Medicine from "../models/Medicine.js";
+import Medicine from "../models/medicine.js";
 
 export const addMedicine = async (req, res) => {
   try {
